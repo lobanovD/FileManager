@@ -20,8 +20,6 @@ class MyFileManager {
         
         guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
-        print(url)
-        
         let contents = try? fileManager.contentsOfDirectory(atPath: url.path)
         
         guard let contents = contents else { return }

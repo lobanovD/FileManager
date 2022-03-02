@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  FileManagerVC.swift
 //  FileManager
 //
 //  Created by Dmitrii Lobanov on 16.02.2022.
@@ -8,7 +8,7 @@
 import UIKit
 import PhotosUI
 
-class ViewController: UIViewController {
+class FileManagerVC: UIViewController {
     
     @IBAction func addFileButton(_ sender: Any) {
         
@@ -24,28 +24,35 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "File Manager"
+        
         NotificationCenter.default.addObserver(self, selector: #selector(reload), name: Notification.Name("someEvent"), object: nil)
         
         filesListTableView.dataSource = self
         filesListTableView.register(TableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         navigationItem.title = "File Manager"
+        navigationItem.hidesBackButton = true
         
         view.addSubview(filesListTableView)
         setupContstraint()
         
         MyFileManager.shared.getListFiles()
+       
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.filesListTableView.reloadData()
     }
     
     @objc func reload() {
         self.filesListTableView.reloadData()
-        print("reload tableView")
     }
     
     // UI elements
     lazy var filesListTableView: UITableView = {
         let filesListTableView = UITableView()
         filesListTableView.translatesAutoresizingMaskIntoConstraints = false
-        filesListTableView.backgroundColor = .lightGray
+        filesListTableView.backgroundColor = .systemGray6
         return filesListTableView
     }()
     
@@ -60,14 +67,19 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITableViewDataSource, UITableViewDelegate {
+extension FileManagerVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         MyFileManager.filesListArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = filesListTableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TableViewCell
-        cell.textLabel?.text = MyFileManager.filesListArray.sorted()[indexPath.row]
+        if UserDefaults.standard.bool(forKey: "sort") {
+            cell.textLabel?.text = MyFileManager.filesListArray.sorted(by: < )[indexPath.row]
+        } else {
+            cell.textLabel?.text = MyFileManager.filesListArray.sorted(by: > )[indexPath.row]
+        }
+        
         return cell
     }
     
@@ -83,7 +95,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 
-extension ViewController: PHPickerViewControllerDelegate {
+extension FileManagerVC: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         
