@@ -109,7 +109,7 @@ extension FileManagerVC: PHPickerViewControllerDelegate {
                         
                         MyFileManager.shared.createFile(data: imageData)
                         
-                        self.dismiss(animated: true, completion: nil)
+                        picker.dismiss(animated: true, completion: nil)
                         
                         MyFileManager.shared.getListFiles()
                         

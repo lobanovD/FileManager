@@ -17,7 +17,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         //        временно удаление ключа (для удаления ключа, раскомментировать, запустить приложение, закомментировать, удалить приложение с устройства и установить заново
-        
+//
 //                        do {
 //                            try Locksmith.deleteDataForUserAccount(userAccount: "FileManager")
 //                        } catch {
