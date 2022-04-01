@@ -47,6 +47,12 @@ class LoginInspector: LoginProtocol {
         }
     }
     
+    func checkKeychain() {
+        let result = Locksmith.loadDataForUserAccount(userAccount: userAccount)
+        guard let result = result else { return }
+        print("Состояние KeyChain: \(result)")
+    }
+    
     // метод проверки существующего пароля
     func checkPassword(password: String) {
         let result = Locksmith.loadDataForUserAccount(userAccount: userAccount)

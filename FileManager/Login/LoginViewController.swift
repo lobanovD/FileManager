@@ -99,11 +99,17 @@ class LoginViewController: UIViewController {
     // первичный метод кнопки
     @objc func firstPasswordButtonAction() {
         
+        print("1. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
+        
         guard let passwordText = self.passwordTF.text else { return }
         let checkLenghtPassword = LoginInspector.shared.checkLenghtPassword(password: passwordText)
         if checkLenghtPassword {
             LoginInspector.shared.setFirstPassword()
         }
+        
+        print("2. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
         
     }
     
@@ -113,6 +119,10 @@ class LoginViewController: UIViewController {
         let alertAction = UIAlertAction(title: "OK", style: .default)
         alertVC.addAction(alertAction)
         self.present(alertVC, animated: true, completion: nil)
+        
+        print("3. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
+        
     }
     
     // метод сброса интерфейса для ввода пароля повторно
@@ -122,6 +132,8 @@ class LoginViewController: UIViewController {
         passwordButton.setTitle("Повторите пароль", for: .normal)
         passwordButton.removeTarget(self, action: #selector(firstPasswordButtonAction), for: .touchUpInside)
         passwordButton.addTarget(self, action: #selector(comparePasswords), for: .touchUpInside)
+        print("4. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
     }
     
     // сверка паролей
@@ -132,6 +144,8 @@ class LoginViewController: UIViewController {
         if checkLenghtPassword {
             LoginInspector.shared.comparePasswords(firstPassword: firstPassword, secondPassword: secondPassword)
         }
+        print("5. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
     }
     
     // сброс при вводе неверного повторного пароля
@@ -146,6 +160,8 @@ class LoginViewController: UIViewController {
         passwordButton.addTarget(self, action: #selector(firstPasswordButtonAction), for: .touchUpInside)
         passwordButton.setTitle("Создать пароль", for: .normal)
         passwordTF.text?.removeAll()
+        print("6. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
     }
     
     //  метод перехода на экран FileManager
@@ -154,12 +170,16 @@ class LoginViewController: UIViewController {
         let tabbar = storyboard.instantiateViewController(withIdentifier: "TabBar") as! UITabBarController
         tabbar.modalPresentationStyle = .fullScreen
         self.present(tabbar, animated: false, completion: nil)
+        print("7. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
     }
     
     //  метод проверки существующего пароля
     @objc func insertPasswordButtonAction() {
         guard let password = passwordTF.text else { return }
         LoginInspector.shared.checkPassword(password: password)
+        print("8. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
     }
     
     // Алерт при ошибке в пароле
@@ -169,5 +189,7 @@ class LoginViewController: UIViewController {
         alertVC.addAction(alertAction)
         self.present(alertVC, animated: true, completion: nil)
         passwordTF.text?.removeAll()
+        print("9. \(firstPassword), \(secondPassword)")
+        LoginInspector.shared.checkKeychain()
     }
 }
